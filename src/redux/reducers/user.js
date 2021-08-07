@@ -1,4 +1,9 @@
-import { SET_IS_SIGN, SET_LOGIN_LOADING, SET_SIGNIN_LOADING, USER_LOGIN, USER_SIGNIN } from '../types';
+import {
+    SET_IS_SIGN,
+    SET_LOGIN_LOADING,
+    SET_SIGNIN_LOADING,
+    USER_LOGIN, USER_SIGNIN
+} from '../types';
 
 
 const initialState = {
@@ -21,20 +26,13 @@ export const user = (state = initialState, { type, payload }) => {
             return { ...state, isSignIn: payload };
 
         case USER_LOGIN:
+        case USER_SIGNIN:
             return {
                 ...state,
                 ...payload,
                 loginLoading: false,
                 signInLoading: false,
                 isSignIn: false
-            };
-
-        case USER_SIGNIN:
-            return {
-                ...state,
-                uid: payload.uid,
-                isSignIn: false,
-                signInLoading: false
             };
 
         default:

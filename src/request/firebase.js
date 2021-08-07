@@ -4,6 +4,7 @@ import shortid from 'shortid';
 import moment from 'moment';
 
 import { dateTypes } from '~/configs';
+import { setAsync } from '~/utils/asyncStorage';
 
 const AUTH = auth();
 const DB = database();
@@ -17,14 +18,22 @@ export const refs = {
 
 export const SIGNINWITHEMAIL = args => new Promise((resolve, reject) => {
     const { email, password, name } = args;
+
     AUTH
         .createUserWithEmailAndPassword(email, password)
         .then(d => {
             const uid = d.user.uid;
             const ref = refs.userinfo(uid);
 
+            //kullanıcı login bilgilerini async-storage ile kaydediyorum
+            setAsync(
+                asyncStorageKeys.userSecret,
+                { email, password, signin: true, date: new Date().getTime() }
+            );
+
+            //kullanıcının bilgilerini gönderiyorum
             SET(ref, { ...args, password: undefined })
-                .then(() => resolve(d))
+                .then(() => resolve({ uid, name, email }))
                 .catch(reject);
         })
         .catch(error => {
@@ -49,10 +58,15 @@ export const LOGINWITHEMAIL = args => new Promise((resolve, reject) => {
             const uid = d.user.uid;
             const ref = refs.userinfo(uid);
 
+            //kullanıcı login bilgilerini async-storage ile kaydediyorum
+            setAsync(
+                asyncStorageKeys.userSecret,
+                { email, password, signin: true, date: new Date().getTime() }
+            );
+
             GET(ref)
                 .then(d => resolve({ ...d, uid }))
                 .catch(reject);
-
         })
         .catch(e => {
 
