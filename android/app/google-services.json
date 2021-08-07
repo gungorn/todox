@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "365417382554",
+    "firebase_url": "https://todox-63272-default-rtdb.firebaseio.com",
+    "project_id": "todox-63272",
+    "storage_bucket": "todox-63272.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:365417382554:android:ef0140d80c460fa3e85523",
+        "android_client_info": {
+          "package_name": "com.todox"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "365417382554-vt8q1irfnmi7ighfbjevhv46lv12s9i8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6tB-G6JGogNUzBy4vmy0qxdvtatytmfM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "365417382554-vt8q1irfnmi7ighfbjevhv46lv12s9i8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
