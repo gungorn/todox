@@ -1,115 +1,81 @@
-// App Request Class do not use this directly abstract away with some API class //
+import axios from 'axios';
 
-const axios = require("axios").default;
-const qs = require("qs");
+export const endoints = {
+    login: {
+        method: 'post',
+        ep: 'api/admin/login'
+    },
+    register: {
+        method: 'post',
+        ep: 'api/admin/register'
+    },
+    add: {
+        method: 'post',
+        ep: 'api/product/add'
+    },
+    restaurantDetails: {
+        method: 'get',
+        params: ['id'],
+        ep: 'api/resturant/restaurantDetails'
+    }
+};
 
-class Request {
-	/**
-	 *
-	 * Get Search Query
-	 * @static
-	 * @param {string} [URL=""]
-	 * @param {*} [params={}]
-	 * @param {*} [headers={}]
-	 * @returns
-	 * @memberof Request
-	 */
-	static async get(URL = "", params = {}, headers = {}) {
-		URL = this.baseURL + URL + "?" + qs.stringify(params);
-		this.access_token && (headers = { ...headers, Authorization: "Bearer " + this.access_token });
-		try {
-			console.log("GET :", URL);
-			const { data } = await axios.get(URL, { headers });
-			return { data };
-		} catch (error) {
-			console.log("GET_ERROR :", URL);
-			return { error: this.__formatError(error) };
-		}
-	}
-	/**
-	 *
-	 * Post JSON
-	 * @static
-	 * @param {string} [URL=""]
-	 * @param {*} [params={}]
-	 * @param {*} [headers={}]
-	 * @returns
-	 * @memberof Request
-	 */
-	static async post(URL = "", params = {}, headers = {}) {
-		URL = this.baseURL + URL;
-		this.access_token && (headers = { ...headers, Authorization: "Bearer " + this.access_token });
+export const LOGIN = ({ email, password }) => new Promise((resolve, reject) => {
+    REQUEST({
+        ep: endoints.login,
+        data: { email, password }
+    })
+        .then(resolve)
+        .catch(reject);
+});
 
-		const body = params;
-		try {
-			console.log("POST :", URL);
-			const { data } = await axios.post(URL, body, { headers });
-			return { data };
-		} catch (error) {
-			console.log("POST_ERROR :", URL);
-			return { error: this.__formatError(error) };
-		}
-	}
-	/**
-	 *
-	 * Upload file with multipart/form
-	 * @static
-	 * @param {string} [URL=""]
-	 * @param {*} [params={}]
-	 * @param {*} [headers={}]
-	 * @returns
-	 * @memberof Request
-	 */
-	static async upload(URL = "", params = {}, headers = {}, onUpload = () => null) {
-		URL = this.baseURL + URL;
-		this.access_token && (headers = { ...headers, Authorization: "Bearer " + this.access_token });
+export const REQUEST = ({ ep, params, data }) => new Promise((resolve, reject) => {
+    switch (ep.method) {
+        case 'get':
+            GETAXIOS(ep.ep, params)
+                .then(resolve)
+                .catch(reject);
+            break;
 
-		const body = this.___jsonToFormData(params);
-		try {
-			console.log("UPLOAD :", URL);
-			const { data } = await axios.post(
-				URL,
-				body,
-				{
-					headers,
-					onUploadProgress: pE => {
-						let percentage;
+        case 'post':
+            POSTAXIOS(ep.ep, data, params)
+                .then(resolve)
+                .catch(reject);
+            break;
+    }
+});
 
-						const totalLength = pE.lengthComputable ?
-							pE.total :
-							pE.target.getResponseHeader('content-length') || pE.target.getResponseHeader('x-decompressed-content-length');
+export const GETAXIOS = (ep, params) => new Promise((resolve, reject) => {
+    let url = `${global.BASEURL}/${ep}`;
 
-						percentage = Math.round((pE.loaded * 100) / totalLength);
-						//const percentage = Math.round(progressEvent.loaded * 100 / progressEvent.total);
+    if (params) {
+        url += '?';
+        Object.keys(params).forEach(d => (url += `${d}=${params[d]}&`));
+        url = url.substring(0, url.length - 1);
+    }
 
-						onUpload(percentage, pE);
-						console.log('onUploadProgress', percentage, pE);
-					}
-				});
-			return { data };
-		} catch (error) {
-			console.log("UPLOAD_ERROR :", URL);
-			return { error: this.__formatError(error) };
-		}
-	}
-	static ___jsonToFormData(data) {
-		const formData = new FormData();
+    axios.get(
+        url,
+        {
+            headers: {
+                'Authorization': `${global.TOKENTYPE}: ${global.token}`
+            }
+        }
+    )
+        .then(response => resolve(response.data))
+        .catch(reject);
+});
 
-		Object.keys(data).forEach(key => {
-			let elem = data[key];
-
-			if (typeof elem == "string" || typeof elem == "number" || typeof elem == "boolean") return formData.append(`${key}`, data[key]);
-			if (Array.isArray(elem)) return elem.forEach(item => formData.append(`${key}[]`, item));
-			if (typeof elem == "object") return formData.append(key, data[key]);
-
-			console.log(`${key} is missing`, typeof elem, elem);
-		});
-
-		return formData;
-	}
-	static __formatError = (error) => {
-		if (error.response) return error.response.data;
-		return error;
-	};
-}
-export { Request };
+export const POSTAXIOS = (ep, data) => new Promise((resolve, reject) => {
+    axios.post(
+        `${global.BASEURL}/${ep}`,
+        data,
+        {
+            headers: {
+                'Authorization': global.token ? `${global.TOKENTYPE}: ${global.token}` : null
+            }
+        }
+    )
+        .then(response => resolve(response.data))
+        .catch(reject);
+});
