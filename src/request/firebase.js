@@ -13,7 +13,9 @@ const DB = database();
 export const refs = {
     users: DB.ref('/USERS'),
     userinfo: uid => DB.ref(`/USERS/${uid}/info`),
+    notes: uid => DB.ref(`/USERS/${uid}/notes`),
     note: (uid, noteid) => DB.ref(`/USERS/${uid}/notes/${noteid}`),
+    notearcive: (uid, noteid) => DB.ref(`/USERS/${uid}/notes/${noteid}/archive`),
 };
 
 export const SIGNUPWITHEMAIL = args => new Promise((resolve, reject) => {
@@ -76,7 +78,7 @@ export const SIGNINWITHEMAIL = args => new Promise((resolve, reject) => {
 
 export const SEND = args => new Promise((resolve, reject) => {
     const { uid, note } = args;
-    const noteid = `${shortid()}_${shortid()}`;
+    const noteid = `${new Date().getTime()}_${shortid()}`;
     const ref = refs.note(uid, noteid);
     const createDate = moment().format(dateTypes.type1);
     const data = {
@@ -90,6 +92,27 @@ export const SEND = args => new Promise((resolve, reject) => {
         .catch(reject);
 });
 
+export const GETUSERNOTEs = args => {
+    const { uid, dispatch } = args;
+    const ref = refs.notes(uid);
+
+    ref.on(
+        'value',
+        d => {
+            console.log('GETUSERNOTEs', d.val());
+            dispatch(d.val());
+        }
+    );
+};
+
+export const NOTEARCHIVE = args => new Promise((resolve, reject) => {
+    const { uid, noteid, archive } = args;
+    const ref = refs.notearcive(uid, noteid);
+
+    SET(ref, archive)
+        .then(() => resolve(true))
+        .catch(reject);
+});
 
 //firebase set function
 export const SET = async (ref, data) => new Promise((resolve, reject) => {

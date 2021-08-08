@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState, useMemo } from 'react';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { Input } from 'react-native-elements';
 import { connect } from 'react-redux';
 
-import { } from '~/components';
+import { T } from '~/components';
 
-import { fontFamily } from '~/configs';
+import { fontFamily, spaceSize } from '~/configs';
 import { SEND, SET_NOTE } from '~/redux';
-import { sbh } from '~/utils/dimensions';
+import { ArchiveList } from '~/screens/Home/ArchiveList';
+import { NoteItem } from '~/screens/Home/NoteItem';
+import { NoteList } from '~/screens/Home/NoteList';
+import { sbh, w, W } from '~/utils/dimensions';
 import { COLOR } from '~/utils/theme';
 
 //import { SEND } from '~redux';
@@ -30,7 +33,7 @@ const Home = conectWithRedux(props => {
         <View style={styles.main}>
             <Input
                 value={user.note}
-                onChangeText={props.SET_NOTE}
+                onChangeText={d => console.log(d)}
                 placeholder={'Bir şeyler not alın...'}
                 label={`Hello, ${user.name}`}
                 labelStyle={styles.inputLabel}
@@ -40,6 +43,10 @@ const Home = conectWithRedux(props => {
                 multiline
             />
 
+            <NoteList />
+
+            <View style={{ height: 2, width: w, backgroundColor: COLOR('blue'), marginVertical: spaceSize.l }} />
+            <ArchiveList />
         </View>
     );
 });
@@ -54,6 +61,13 @@ const styles = StyleSheet.create({
         fontFamily: fontFamily.b,
         color: COLOR('blue'),
         fontSize: 16
+    },
+
+    noteItem: {
+        borderBottomWidth: 1,
+        marginBottom: spaceSize.m,
+        paddingBottom: spaceSize.xxs,
+        borderColor: COLOR('lightGray')
     }
 });
 

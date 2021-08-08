@@ -9,6 +9,8 @@ export const SET_IS_SIGN = payload => ({ type: types.SET_IS_SIGN, payload });
 
 export const SET_NOTE = payload => ({ type: types.SET_NOTE, payload });
 
+export const GET_USER_NOTES = payload => ({ type: types.GET_USER_NOTES, payload });
+
 export const USER_SIGNIN = args => async dispatch => {
     SET_LOGIN_LOADING(true);
 
@@ -31,5 +33,14 @@ export const SEND = args => async dispatch => {
     dispatch({
         type: types.SEND,
         payload: await firebase.SEND(args)
+    });
+};
+
+export const NOTE_ARCHIVE = args => async dispatch => {
+    const data = await firebase.NOTEARCHIVE(args);
+
+    dispatch({
+        type: types.NOTE_ARCHIVE,
+        payload: null
     });
 };
