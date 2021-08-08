@@ -2,7 +2,7 @@ import {
     SET_IS_SIGN,
     SET_LOGIN_LOADING,
     SET_SIGNIN_LOADING,
-    USER_LOGIN, USER_SIGNIN
+    USER_SIGNIN, USER_SIGNUP
 } from '../types';
 
 
@@ -25,8 +25,8 @@ export const user = (state = initialState, { type, payload }) => {
         case SET_IS_SIGN:
             return { ...state, isSignIn: payload };
 
-        case USER_LOGIN:
         case USER_SIGNIN:
+        case USER_SIGNUP:
             return {
                 ...state,
                 ...payload,

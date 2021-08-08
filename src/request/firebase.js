@@ -4,7 +4,7 @@ import shortid from 'shortid';
 import moment from 'moment';
 
 import { dateTypes } from '~/configs';
-import { setAsync } from '~/utils/asyncStorage';
+import { asyncStorageKeys, setAsync } from '~/utils/asyncStorage';
 
 const AUTH = auth();
 const DB = database();
@@ -16,7 +16,7 @@ export const refs = {
     note: (uid, noteid) => DB.ref(`/USERS/${uid}/notes/${noteid}`),
 };
 
-export const SIGNINWITHEMAIL = args => new Promise((resolve, reject) => {
+export const SIGNUPWITHEMAIL = args => new Promise((resolve, reject) => {
     const { email, password, name } = args;
 
     AUTH
@@ -50,7 +50,7 @@ export const SIGNINWITHEMAIL = args => new Promise((resolve, reject) => {
 });
 
 
-export const LOGINWITHEMAIL = args => new Promise((resolve, reject) => {
+export const SIGNINWITHEMAIL = args => new Promise((resolve, reject) => {
     const { email, password } = args;
 
     AUTH.signInWithEmailAndPassword(email, password)

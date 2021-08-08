@@ -7,12 +7,12 @@ export const asyncStorageKeys = {
 	userSecret: 'userSecret',
 };
 
-export const setAsync = (key, value, okey = () => null, error = () => null) => new Promise(resolve => {
+export const setAsync = (key, value, ok = () => null, error = () => null) => new Promise(resolve => {
 	AsyncStorage
 		.setItem(key, JSON.stringify({ key, value }))
 		.then(() => {
 			console.log('>>>> setAsync <<<<', key, value);
-			okey();
+			ok();
 			resolve(true);
 		})
 		.catch(e => {
@@ -22,17 +22,17 @@ export const setAsync = (key, value, okey = () => null, error = () => null) => n
 		});
 });
 
-export const getAsync = (key, okey = () => null, error = () => null) => new Promise(resolve => {
+export const getAsync = (key, ok = () => null, error = () => null) => new Promise(resolve => {
 	AsyncStorage
 		.getItem(key)
 		.then(d => {
 			console.log('>>>> getAsync <<<<', key, d);
 
 			try {
-				okey(JSON.parse(d).value);
+				ok(JSON.parse(d).value);
 				resolve(JSON.parse(d).value);
 			} catch (error) {
-				okey(d);
+				ok(d);
 				resolve(d);
 			}
 		})
@@ -44,7 +44,7 @@ export const getAsync = (key, okey = () => null, error = () => null) => new Prom
 });
 
 
-export const REDUX_PERSIST_STORAGE = AsyncStorage;
+//export const REDUX_PERSIST_STORAGE = AsyncStorage;
 
 /*
 let setCount = 1, getCount = 1, logging = false;

@@ -5,6 +5,8 @@ const fontFamily = {
 };
 
 const fontSize = {
+	x6l: 48,
+	x5l: 42,
 	xxxxxl: 32,
 	xxxxl: 28,
 	xxxl: 24,
