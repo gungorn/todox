@@ -75,12 +75,12 @@ export const SIGNINWITHEMAIL = args => new Promise((resolve, reject) => {
 
 
 export const SEND = args => new Promise((resolve, reject) => {
-    const { uid, text } = args;
+    const { uid, note } = args;
     const noteid = `${shortid()}_${shortid()}`;
     const ref = refs.note(uid, noteid);
     const createDate = moment().format(dateTypes.type1);
     const data = {
-        text,
+        text: note,
         createDate,
         archive: false
     };

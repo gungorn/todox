@@ -7,6 +7,8 @@ export const SET_SIGNIN_LOADING = payload => ({ type: types.SET_SIGNIN_LOADING, 
 
 export const SET_IS_SIGN = payload => ({ type: types.SET_IS_SIGN, payload });
 
+export const SET_NOTE = payload => ({ type: types.SET_NOTE, payload });
+
 export const USER_SIGNIN = args => async dispatch => {
     SET_LOGIN_LOADING(true);
 

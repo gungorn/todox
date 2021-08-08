@@ -6,5 +6,6 @@ export const SET_SIGNIN_LOADING = 'SET_SIGNIN_LOADING';
 
 export const SET_IS_SIGN = 'SET_IS_SIGN';
 
-
 export const SEND = 'SEND';
+
+export const SET_NOTE = 'SET_NOTE';
